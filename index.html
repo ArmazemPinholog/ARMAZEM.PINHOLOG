@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PinhoLog - Controle de Produtos</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
+    header { display: flex; align-items: center; margin-bottom: 20px; }
+    img { height: 50px; margin-right: 10px; }
+    h1 { font-size: 24px; }
+    table { width: 100%; border-collapse: collapse; background: #fff; }
+    th, td { padding: 10px; border: 1px solid #ccc; text-align: center; }
+    th { background-color: #003366; color: #fff; }
+    input, select { padding: 5px; width: 100%; box-sizing: border-box; }
+    .form-row { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+    .form-row input, .form-row select { flex: 1; }
+    button { padding: 10px 15px; background: #ff6600; color: white; border: none; cursor: pointer; }
+    button:hover { background: #cc5200; }
+    .editando { background-color: #ffffcc; }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="PINHOLOG.png" alt="PinhoLog Logo" />
+    <h1>Controle de Produtos</h1>
+  </header>
+
+  <div class="form-row">
+    <input type="text" id="codigo" placeholder="Código do Produto" />
+    <input type="text" id="nome" placeholder="Nome do Produto" />
+    <input type="text" id="referencia" placeholder="Referência" />
+    <input type="number" id="quantidade" placeholder="Quantidade" />
+    <select id="status">
+      <option value="Liberado">Liberado</option>
+      <option value="Bloqueado">Bloqueado</option>
+    </select>
+    <button onclick="salvarProduto()" id="botaoSalvar">Adicionar</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Nome</th>
+        <th>Referência</th>
+        <th>Quantidade</th>
+        <th>Status</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody id="tabela-produtos"></tbody>
+  </table>
+
+  <script>
+    let produtos = JSON.parse(localStorage.getItem('produtos')) || [];
+    let editando = null;
+
+    function salvarProduto() {
+      const codigo = document.getElementById('codigo').value;
+      const nome = document.getElementById('nome').value;
+      const referencia = document.getElementById('referencia').value;
+      const quantidade = document.getElementById('quantidade').value;
+      const status = document.getElementById('status').value;
+
+      if (!codigo || !nome || !referencia || !quantidade) {
+        alert('Por favor, preencha todos os campos.');
+        return;
+      }
+
+      const novoProduto = { codigo, nome, referencia, quantidade, status };
+
+      if (editando !== null) {
+        produtos[editando] = novoProduto;
+        editando = null;
+        document.getElementById('botaoSalvar').innerText = 'Adicionar';
+      } else {
+        produtos.push(novoProduto);
+      }
+
+      atualizarTabela();
+      salvarLocal();
+      limparFormulario();
+    }
+
+    function atualizarTabela() {
+      const tabela = document.getElementById('tabela-produtos');
+      tabela.innerHTML = '';
+      produtos.forEach((p, index) => {
+        tabela.innerHTML += `
+          <tr${index === editando ? ' class="editando"' : ''}>
+            <td>${p.codigo}</td>
+            <td>${p.nome}</td>
+            <td>${p.referencia}</td>
+            <td>${p.quantidade}</td>
+            <td>${p.status}</td>
+            <td>
+              <button onclick="editarProduto(${index})">Editar</button>
+              <button onclick="removerProduto(${index})">Remover</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function removerProduto(index) {
+      produtos.splice(index, 1);
+      atualizarTabela();
+      salvarLocal();
+    }
+
+    function editarProduto(index) {
+      const p = produtos[index];
+      document.getElementById('codigo').value = p.codigo;
+      document.getElementById('nome').value = p.nome;
+      document.getElementById('referencia').value = p.referencia;
+      document.getElementById('quantidade').value = p.quantidade;
+      document.getElementById('status').value = p.status;
+      editando = index;
+      document.getElementById('botaoSalvar').innerText = 'Salvar Alterações';
+    }
+
+    function limparFormulario() {
+      document.getElementById('codigo').value = '';
+      document.getElementById('nome').value = '';
+      document.getElementById('referencia').value = '';
+      document.getElementById('quantidade').value = '';
+      document.getElementById('status').value = 'Liberado';
+    }
+
+    function salvarLocal() {
+      localStorage.setItem('produtos', JSON.stringify(produtos));
+    }
+
+    atualizarTabela();
+  </script>
+
+  <footer style="margin-top: 30px; font-size: 14px;">
+    <strong>Como compartilhar:</strong>
+    <p>Você pode compartilhar este aplicativo salvando este arquivo HTML e enviando para outras pessoas por e-mail, pendrive ou subir em um servidor ou serviço como GitHub Pages.</p>
+    <p>Para abrir, basta clicar duas vezes no arquivo HTML ou arrastá-lo para o navegador.</p>
+  </footer>
+</body>
+</html>
