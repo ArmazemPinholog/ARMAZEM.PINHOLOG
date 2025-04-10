@@ -168,7 +168,32 @@
 });
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
-  console.log('Firebase iniciado com sucesso!');
+  console.log('Firebase iniciado com sucesso!');<script type="module">
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+
+  const db = getFirestore();
+
+  const form = document.getElementById('meuFormulario'); // substitua pelo ID real do seu formulário
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const nome = document.getElementById('nome').value;
+    const email = document.getElementById('email').value;
+
+    try {
+      await addDoc(collection(db, "usuarios"), {
+        nome: nome,
+        email: email,
+        criadoEm: new Date()
+      });
+      alert("Dados enviados com sucesso!");
+    } catch (e) {
+      console.error("Erro ao adicionar documento: ", e);
+    }
+  });
+</script>
+
 </script>
 <body>
     <div class="overlay"></div>
