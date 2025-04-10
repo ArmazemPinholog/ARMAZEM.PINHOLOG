@@ -151,7 +151,7 @@
 </head><script type="module">
  <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyCLsCBO0KpX9V6z7zLBMHd-xiztUjtE4OM",
@@ -166,30 +166,34 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  const form = document.getElementById('formulario');
+const form = document.getElementById('productForm');
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const nome = document.getElementById('nome').value;
-    const email = document.getElementById('email').value;
+    const code = document.getElementById('code').value;
+    const name = document.getElementById('name').value;
+    const reference = document.getElementById('reference').value;
+    const quantity = document.getElementById('quantity').value;
+    const status = document.getElementById('status').value;
 
     try {
-      await addDoc(collection(db, "usuarios"), {
-        nome: nome,
-        email: email,
-        criadoEm: new Date()
-      });
+        await addDoc(collection(db, "products"), {
+            code,
+            name,
+            reference,
+            quantity,
+            status,
+            createdAt: new Date()
+        });
 
-      alert("Dados enviados com sucesso!");
-
-      form.reset(); // limpa o formulário
-
+        alert("Produto salvo com sucesso!");
+        form.reset();
     } catch (error) {
-      console.error("Erro ao adicionar no Firestore: ", error);
-      alert("Erro ao enviar dados.");
+        console.error("Erro ao salvar no Firestore:", error);
+        alert("Erro ao salvar os dados no Firestore.");
     }
-  });
+});
 </script>
 </script>
 <body>
@@ -333,38 +337,6 @@
         }
 
         window.addEventListener('load', updateTable);
-    </script type="module">// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyAYNflhDLxPdg-oZh6ShGDqwIHKysO4Pk4",
-  authDomain: "armazem-pinholog-9a23b.firebaseapp.com",
-  projectId: "armazem-pinholog-9a23b",
-  storageBucket: "armazem-pinholog-9a23b.firebasestorage.app",
-  messagingSenderId: "1033037163953",
-  appId: "1:1033037163953:web:b880ecb400d618df82a190",
-  measurementId: "G-8WTPQ86RSL"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);db.collection("products").add({
-  code: product.code,
-  name: product.name,
-  reference: product.reference,
-  quantity: product.quantity,
-  status: product.status
-});db.collection("products").get().then((querySnapshot) => {
-  let products = [];
-  querySnapshot.forEach((doc) => {
-    products.push({ id: doc.id, ...doc.data() });
-  });
-  // Atualize a tabela
-});
+    </script
 </body>
 </html>
