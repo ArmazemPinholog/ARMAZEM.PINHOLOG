@@ -160,8 +160,12 @@
     messagingSenderId: "135664953041",
     appId: "1:135664953041:web:4f3d24ec487e0fc56007f0",
     measurementId: "G-0PB9M2Y3GM"
-  };
-
+  };.then((docRef) => {
+  console.log("Produto salvo com sucesso! ID:", docRef.id);
+})
+.catch((error) => {
+  console.error("Erro ao salvar produto:", error);
+});
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
   console.log('Firebase iniciado com sucesso!');
