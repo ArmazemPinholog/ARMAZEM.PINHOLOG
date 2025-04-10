@@ -149,6 +149,7 @@
         }
     </style>
 </head><script type="module">
+ <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
   import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
@@ -160,20 +161,12 @@
     messagingSenderId: "135664953041",
     appId: "1:135664953041:web:4f3d24ec487e0fc56007f0",
     measurementId: "G-0PB9M2Y3GM"
-  };.then((docRef) => {
-  console.log("Produto salvo com sucesso! ID:", docRef.id);
-})
-.catch((error) => {
-  console.error("Erro ao salvar produto:", error);
-});
+  };
+
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
-  console.log('Firebase iniciado com sucesso!');<script type="module">
-  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
-  const db = getFirestore();
-
-  const form = document.getElementById('meuFormulario'); // substitua pelo ID real do seu formulário
+  const form = document.getElementById('formulario');
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -187,13 +180,17 @@
         email: email,
         criadoEm: new Date()
       });
+
       alert("Dados enviados com sucesso!");
-    } catch (e) {
-      console.error("Erro ao adicionar documento: ", e);
+
+      form.reset(); // limpa o formulário
+
+    } catch (error) {
+      console.error("Erro ao adicionar no Firestore: ", error);
+      alert("Erro ao enviar dados.");
     }
   });
 </script>
-
 </script>
 <body>
     <div class="overlay"></div>
@@ -202,7 +199,20 @@
         <h1 class="app-title">ARMAZEM PINHOLOG</h1>
     </header>
 
-    <div class="container">
+    <div class="container"><form id="formulario">
+  <div class="form-group">
+    <label for="nome">Nome</label>
+    <input type="text" id="nome" name="nome" required>
+  </div>
+
+  <div class="form-group">
+    <label for="email">E-mail</label>
+    <input type="email" id="email" name="email" required>
+  </div>
+
+  <button type="submit">Salvar</button>
+</form>
+
         <form id="productForm" onsubmit="handleSubmit(event)">
             <div class="form-group">
                 <label for="code">Código:</label>
