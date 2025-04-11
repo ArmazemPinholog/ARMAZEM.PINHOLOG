@@ -149,30 +149,6 @@
         }
     </style>
     <script>
-    e.preventDefault();
-
-    const code = document.getElementById("code").value;
-    const name = document.getElementById("name").value;
-    const reference = document.getElementById("reference").value;
-    const quantity = parseInt(document.getElementById("quantity").value);
-    const status = document.getElementById("status").value;
-
-    try {
-      await addDoc(collection(db, "products"), {
-        code,
-        name,
-        reference,
-        quantity,
-        status,
-        createdAt: new Date()
-      });
-      alert("✅ Produto salvo com sucesso!");
-      form.reset();
-    } catch (error) {
-      console.error("Erro ao salvar:", error);
-      alert("Erro ao salvar produto. Veja o console.");
-    }
-  });
 </script>
 <body>
     <div class="overlay"></div>
