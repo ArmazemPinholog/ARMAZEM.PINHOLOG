@@ -151,7 +151,38 @@
 </head><script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
   import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+<script type="module">
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
+  const db = getFirestore();
+
+  const form = document.getElementById("productForm");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const code = document.getElementById("code").value;
+    const name = document.getElementById("name").value;
+    const reference = document.getElementById("reference").value;
+    const quantity = parseInt(document.getElementById("quantity").value);
+    const status = document.getElementById("status").value;
+
+    try {
+      await addDoc(collection(db, "products"), {
+        code,
+        name,
+        reference,
+        quantity,
+        status,
+        createdAt: new Date()
+      });
+      alert("Produto salvo com sucesso!");
+      form.reset();
+    } catch (error) {
+      console.error("Erro ao salvar:", error);
+      alert("Erro ao salvar produto. Veja o console.");
+    }
+  });
   const firebaseConfig = {
     apiKey: "AIzaSyCLsCBO0KpX9V6z7zLBMHd-xiztUjtE4OM",
     authDomain: "armazem-pinholog.firebaseapp.com",
